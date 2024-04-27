@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+<ImageView
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:src="@drawable/pie"
+    />
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:fontFamily="@font/monst_bold"
+android:text="@string/app_name"
+android:textSize="40sp"
+android:textColor="?colorSecondary"/>
+
+<TextView
+android:layout_marginTop="16dp"
+android:layout_width="250dp"
+android:layout_height="wrap_content"
+android:text="Добро пожаловать в мир вкусов!"
+android:fontFamily="@font/monst_medium"
+android:textColor="?colorSecondary"
+android:textSize="24sp"
+android:gravity="center"/>
+<com.google.android.material.textfield.TextInputLayout
+android:layout_marginTop="32dp"
+style="?attr/textInputFilledStyle"
+android:id="@+id/mail"
+android:layout_width="336dp"
+android:layout_height="wrap_content"
+android:hint="Почта"
+app:boxBackgroundColor="#FBEBE1"
+app:boxStrokeWidth="0dp">
+<com.google.android.material.textfield.TextInputEditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/emailInp"
+    />
+</com.google.android.material.textfield.TextInputLayout>
+<com.google.android.material.textfield.TextInputLayout
+android:layout_marginTop="32dp"
+style="?attr/textInputFilledStyle"
+android:id="@+id/password"
+android:layout_width="336dp"
+android:layout_height="wrap_content"
+android:hint="Пароль"
+app:boxBackgroundColor="#FBEBE1"
+app:boxStrokeWidth="0dp">
+<com.google.android.material.textfield.TextInputEditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/passwordInp"
+    />
+</com.google.android.material.textfield.TextInputLayout>
+<Button
+android:layout_marginTop="64dp"
+style="@style/Widget.Material3.Button.TonalButton"
+android:id="@+id/sign"
+android:backgroundTint="?colorPrimaryContainer"
+android:textColor="?colorPrimary"
+android:layout_width="130dp"
+android:layout_height="wrap_content"
+android:text="Вход" />
+
+<Button
+android:id="@+id/register"
+style="@style/Widget.Material3.Button.TextButton"
+android:layout_width="130dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="-5dp"
+android:text="Регистрация"
+android:textColor="?colorSecondary" />
+
+    </LinearLayout>

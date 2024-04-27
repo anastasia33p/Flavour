@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Flavour</string>
+    <string-array name="roles_array">
+        <item>Профессионал</item>
+        <item>Любитель</item>
+    </string-array>
+</resources>
