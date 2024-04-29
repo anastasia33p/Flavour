@@ -1,5 +1,7 @@
 package com.example.flavour.views;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.flavour.adapters.RecipeAdapter;
 import com.example.flavour.databinding.FragmentSearchBinding;
 import com.example.flavour.models.Recipe;
 import com.example.flavour.viewmodels.SearchViewModel;
+import com.example.flavour.workers.NotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEvents {
     FragmentSearchBinding binding;
@@ -30,6 +37,7 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
 
         viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         viewModel.getRecipe().observe(getViewLifecycleOwner(), adapter::submitList);
+        createWorker();
         viewModel.getRecipes();
 
         binding.list.setAdapter(adapter);
@@ -54,5 +62,12 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
             }
         });
         viewModel.addFavorite(recipe, is_favorite);
+    }
+
+    public void createWorker() {
+
+        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 30, TimeUnit.MINUTES)
+                .build();
+        WorkManager.getInstance(requireContext()).enqueue(myWorkRequest);
     }
 }

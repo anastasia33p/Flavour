@@ -26,9 +26,10 @@ public class SearchViewModel extends ViewModel {
         List<Recipe> recipesList = new ArrayList<>();
         recipes.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                Recipe val = new Recipe();
                 DataSnapshot data = task.getResult();
                 for (DataSnapshot snapshot : data.getChildren()) {
-                    Recipe val = snapshot.getValue(Recipe.class);
+                    val = snapshot.getValue(Recipe.class);
                     recipesList.add(val);
                 }
                 recipe.postValue(recipesList);
@@ -61,4 +62,5 @@ public class SearchViewModel extends ViewModel {
     public MutableLiveData<List<Recipe>> getRecipe() {
         return recipe;
     }
+
 }

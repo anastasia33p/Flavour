@@ -55,7 +55,7 @@ public class FavoritesViewModel extends ViewModel {
         users = firebaseDatabase.getReference("users");
         if (!is_favorite) {
             users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("favorites").child(recipe.getId().toString()).setValue(recipe.getId())
+                    .child("favorites").push().setValue(recipe.getId())
                     .addOnSuccessListener(aVoid -> addFavorite.postValue(true))
                     .addOnFailureListener(e -> addFavorite.postValue(false));
         }
