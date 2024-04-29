@@ -56,6 +56,7 @@ public class RegisterFragment extends Fragment {
                         user.setEmail(binding.emailInp.getText().toString());
                         user.setName(binding.nameInp.getText().toString());
                         user.setRole(binding.role.getText().toString());
+                        user.setId(authResult.getUser().getUid());
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     ((MainActivity) requireActivity()).toSecondActivity();

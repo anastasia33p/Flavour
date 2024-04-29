@@ -10,14 +10,23 @@ public class User {
     private String password;
     private String role;
     private String name;
+    private String id;
     private ArrayList<Long> favorites;
 
     public User() {}
-    public User(String email, String password, String role, String name) {
+    public User(String email, String password, String role, String name, String id) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
