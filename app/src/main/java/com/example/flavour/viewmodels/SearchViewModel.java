@@ -17,6 +17,7 @@ public class SearchViewModel extends ViewModel {
     DatabaseReference users;
     MutableLiveData<Boolean> addFavorite = new MutableLiveData<>();
     FirebaseDatabase db;
+    MutableLiveData<User> user = new MutableLiveData<>();
     DatabaseReference recipes;
     MutableLiveData<List<Recipe>> recipe = new MutableLiveData<>();
 
@@ -26,10 +27,9 @@ public class SearchViewModel extends ViewModel {
         List<Recipe> recipesList = new ArrayList<>();
         recipes.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Recipe val = new Recipe();
                 DataSnapshot data = task.getResult();
                 for (DataSnapshot snapshot : data.getChildren()) {
-                    val = snapshot.getValue(Recipe.class);
+                    Recipe val = snapshot.getValue(Recipe.class);
                     recipesList.add(val);
                 }
                 recipe.postValue(recipesList);
@@ -55,6 +55,24 @@ public class SearchViewModel extends ViewModel {
         }
     }
 
+    public void getUser() {
+        db = FirebaseDatabase.getInstance();
+        users = db.getReference("users");
+        users.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot data = task.getResult();
+                for (DataSnapshot snapshot : data.getChildren()) {
+                    User val = snapshot.getValue(User.class);
+                    if (val.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        user.postValue(val);
+                    }
+                }
+            }
+        });
+    }
+    public MutableLiveData<User> getMUser() {
+        return user;
+    }
 
     public MutableLiveData<Boolean> getAddFavorite() {
         return addFavorite;

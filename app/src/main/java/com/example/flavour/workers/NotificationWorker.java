@@ -49,8 +49,8 @@ public class NotificationWorker extends Worker {
                 if (id == null) return;
                 if (!id.equals(String.valueOf(last_id))) {
                     createNotification("Уведомление", "Добавлен новый рецепт");
-                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("last_id", Context.MODE_PRIVATE).edit();
-                    editor.putLong("last_id", Long.parseLong(id));
+                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE).edit();
+                    editor.putLong("last_id", Long.parseLong(id)).apply();
                 }
             }
         });

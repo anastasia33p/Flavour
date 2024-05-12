@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -65,6 +66,14 @@ public class SecondActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable("recipe", recipe);
         navController.navigate(R.id.recipeFragment, bundle);
+    }
+    public void navigateToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void navigateToEditorFragment(){
+        navController.navigate(R.id.editorFragment);
     }
 
     public void disableBottomNav() {

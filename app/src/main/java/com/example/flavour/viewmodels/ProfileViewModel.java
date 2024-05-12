@@ -32,6 +32,9 @@ public class ProfileViewModel extends ViewModel {
             }
         });
     }
+    public void exit() {
+        FirebaseAuth.getInstance().signOut();
+    }
     public MutableLiveData<User> getMUser() {
         return user;
     }

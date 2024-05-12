@@ -1,24 +1,24 @@
 package com.example.flavour.models;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class User {
 
     private String email;
-    private String password;
     private String role;
     private String name;
     private String id;
     private ArrayList<Long> favorites;
 
-    public User() {}
-    public User(String email, String password, String role, String name, String id) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.name = name;
+    public User() {
     }
 
     public String getId() {
@@ -35,14 +35,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getRole() {
@@ -62,10 +54,15 @@ public class User {
     }
 
     public ArrayList<Long> getFavorites() {
+        if (favorites.size() == 0) return new ArrayList<>();
         return favorites;
     }
 
-    public void setFavorites(ArrayList<Long> favorites) {
-        this.favorites = favorites;
+    public void setFavorites(Object favorites) {
+        if (favorites instanceof Map) {
+            this.favorites = new ArrayList<>(((HashMap<String, Long>) favorites).values());
+        } else {
+            this.favorites = (ArrayList<Long>) favorites;
+        }
     }
 }

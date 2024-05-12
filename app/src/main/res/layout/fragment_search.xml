@@ -29,6 +29,17 @@
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="Добавить новый рецепт"
+            android:drawableLeft="@drawable/baseline_menu_book_24"
+            android:drawableTint="?colorOnPrimary"
+            android:backgroundTint="?colorSecondary"
+            android:id="@+id/add"
+            app:cornerRadius="10dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,7 +47,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-
 
 </LinearLayout>

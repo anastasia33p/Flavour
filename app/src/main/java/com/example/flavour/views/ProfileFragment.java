@@ -1,8 +1,14 @@
 package com.example.flavour.views;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,10 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,16 +37,70 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private ProfileViewModel viewModel;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
+    private final ActivityResultLauncher<String> requestPermission = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (isGranted) {
+                    editor.putBoolean("notificationsAllowed", true).commit();
+                } else {
+                    editor.putBoolean("notificationsAllowed", false).commit();
+                }
+            });
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
-        setData();
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        preferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
         binding.menu.setOnClickListener(v -> {
             setMenu(inflater);
         });
+        binding.exit.setOnClickListener(v -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+            builder
+                    .setTitle("Выход")
+                    .setMessage("Вы хотите выйти из аккаунта?")
+                    .setPositiveButton("Да",(dialog, which) -> {
+                        viewModel.exit();
+                        editor.clear();
+                        editor.apply();
+                        ((SecondActivity) requireActivity()).navigateToMainActivity();
+                    } )
+                    .setNegativeButton("Нет", null);
+            builder.show();
+        });
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if (preferences.getString("name", null) == null || preferences.getString("role", null) == null) {
+            setData();}
+        else{
+            binding.name.setText(preferences.getString("name", null));
+            binding.role.setText(preferences.getString("role", null));
+        }
+        binding.notswitch.setChecked(preferences.getBoolean("notificationOn", false));
+        binding.notswitch.setOnClickListener(buttonView -> setNotifications(binding.notswitch.isChecked()));
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void setNotifications(boolean isChecked) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS);
+            binding.notswitch.setChecked(false);
+        } else {
+            editor.putBoolean("notificationsAllowed", true).commit();
+            editor.putBoolean("notificationOn", isChecked).commit();
+            Toast.makeText(requireContext(), String.valueOf(preferences.getBoolean("notificationsAllowed", false)), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showAuthor(LayoutInflater inflater) {
@@ -55,12 +119,7 @@ public class ProfileFragment extends Fragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(inflater.getContext());
         builder
                 .setTitle("О программе")
-                .setMessage("• Программа представляет собой кулинарную книгу, в которой вы можете искать рецепты и добавлять их в избранное. " +
-                        "Вы можете создавать свои рецепты если являетесь поваром\n" +
-                        "• Инструкция - для использования программы, начните с выбора вкладки Рецепты. " +
-                        "Здесь вы можете использовать поиск по ключевым словам, чтобы найти нужное блюдо. " +
-                        "После того, как вы нашли интересующий вас рецепт, вы можете добавить его в избранное, нажав на соответствующую кнопку. " +
-                        "В разделе Избранные вы сможете быстро найти сохраненные рецепты. Во вкладке Профиль вы можете найти информацию о программе." )
+                .setMessage(getString(R.string.program_about))
                 .setPositiveButton("Ok", null);
         builder.show();
     }
@@ -84,11 +143,25 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setData() {
-        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
         viewModel.getMUser().observe(getViewLifecycleOwner(), user -> {
             binding.name.setText(user.getName());
             binding.role.setText(user.getRole());
         });
         viewModel.getUser();
+    }
+
+    @Override
+    public void onDestroy() {
+        editor.putString("name", binding.name.getText().toString()).commit();
+        editor.putString("role", binding.role.getText().toString()).commit();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        editor.putString("name", binding.name.getText().toString()).commit();
+        editor.putString("role", binding.role.getText().toString()).commit();
+        super.onStop();
     }
 }

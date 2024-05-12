@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="?colorSurfaceContainer"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                android:visibility="gone"
+                android:id="@+id/photoRecipe"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/load"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:backgroundTint="?colorPrimary"
+                android:text="Загрузить фото"
+                android:textColor="?colorSurfaceContainerLowest" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Загрузите фотографию в формате JPEG или PNG"
+                android:textColor="?colorOnSurfaceVariant" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name"
+        style="?attr/textInputFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Название"
+        app:boxBackgroundColor="#FBEBE1"
+        app:boxStrokeWidth="0dp"
+        app:helperText="Введите название длинной не более 15 символов">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameInp"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/difficulty"
+            style="?attr/textInputFilledStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Сложность"
+            android:layout_marginEnd="16dp"
+            app:boxBackgroundColor="#FBEBE1"
+            app:boxStrokeWidth="0dp"
+            app:helperText="Введите сложность по 5-балльной шкале">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/diffInp"
+                android:inputType="number"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutTime"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="Выберите время">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ingridients"
+        style="?attr/textInputFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Ингридиенты"
+        app:boxBackgroundColor="#FBEBE1"
+        app:boxStrokeWidth="0dp"
+        app:helperText="Введите список ингридиентов через ;">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ingridientsInp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"/>
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

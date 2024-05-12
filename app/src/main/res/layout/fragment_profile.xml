@@ -1,56 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
 
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Профиль"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/monst_bold"
-            android:textSize="30dp"
+            android:text="Профиль"
             android:textColor="?colorPrimary"
-            android:layout_centerInParent="true"/>
+            android:textSize="30dp" />
+
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/menu"
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
             app:icon="@drawable/baseline_menu_24"
             app:iconSize="32dp"
-            app:iconTint="?colorPrimary"
-            android:id="@+id/menu"
-            android:layout_gravity="end"
-            android:layout_alignParentEnd="true"/>
+            app:iconTint="?colorPrimary" />
     </RelativeLayout>
+
     <ImageView
-        android:layout_marginTop="8dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/pie"
-        />
+        android:layout_marginTop="8dp"
+        android:src="@drawable/pie" />
+
     <TextView
         android:id="@+id/name"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Петухова Анастасия"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/monst_bold"
         android:textColor="?colorSecondary"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
+
     <TextView
         android:id="@+id/role"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Любитель"
+        android:layout_marginTop="8dp"
+        android:textColor="?colorSecondary"
+        android:textSize="16sp" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Уведомления"
+        app:trackDecorationTint="#E09E4E"
+        app:thumbTint="#E09E4E"
         android:textSize="16sp"
-        android:textColor="?colorSecondary"/>
+        android:textColor="?colorPrimary"
+        app:trackTint="?colorPrimaryContainer"
+        android:paddingHorizontal="24dp"
+        android:id="@+id/notswitch"
+        />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="36dp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:id="@+id/exit"
+            android:text="Выход"/>
+
 </LinearLayout>

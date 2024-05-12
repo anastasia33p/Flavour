@@ -27,11 +27,13 @@ import java.util.concurrent.TimeUnit;
 public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEvents {
     FragmentSearchBinding binding;
     private SearchViewModel viewModel;
+    private SharedPreferences preferences;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
+        preferences = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         RecipeAdapter adapter = new RecipeAdapter();
         adapter.setEvents(this);
 
@@ -39,7 +41,16 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
         viewModel.getRecipe().observe(getViewLifecycleOwner(), adapter::submitList);
         createWorker();
         viewModel.getRecipes();
+        viewModel.getMUser().observe(getViewLifecycleOwner(), user -> {
+            if (user.getRole()=="Любитель") {
+                binding.add.setVisibility(View.GONE);
+            }
+        });
+        viewModel.getUser();
 
+        binding.add.setOnClickListener(v -> {
+            ((SecondActivity) requireActivity()).navigateToEditorFragment();
+        });
         binding.list.setAdapter(adapter);
         binding.list.setLayoutManager(new LinearLayoutManager(getContext()));
         return binding.getRoot();
@@ -65,9 +76,11 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
     }
 
     public void createWorker() {
+        if (preferences.getBoolean("notificationsOn", false)){
+            PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 30, TimeUnit.MINUTES)
+                    .build();
+            WorkManager.getInstance(requireContext()).enqueue(myWorkRequest);
+        }
 
-        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 30, TimeUnit.MINUTES)
-                .build();
-        WorkManager.getInstance(requireContext()).enqueue(myWorkRequest);
     }
 }
