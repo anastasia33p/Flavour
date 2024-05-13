@@ -67,12 +67,12 @@ public class ProfileFragment extends Fragment {
             builder
                     .setTitle("Выход")
                     .setMessage("Вы хотите выйти из аккаунта?")
-                    .setPositiveButton("Да",(dialog, which) -> {
+                    .setPositiveButton("Да", (dialog, which) -> {
                         viewModel.exit();
-                        editor.clear();
-                        editor.apply();
+                        editor.remove("name").commit();
+                        editor.remove("role").commit();
                         ((SecondActivity) requireActivity()).navigateToMainActivity();
-                    } )
+                    })
                     .setNegativeButton("Нет", null);
             builder.show();
         });
@@ -82,10 +82,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if (preferences.getString("name", null) == null || preferences.getString("role", null) == null) {
-            setData();}
-        else{
-            binding.name.setText(preferences.getString("name", null));
-            binding.role.setText(preferences.getString("role", null));
+            setData();
+        } else {
+            binding.name.setText(preferences.getString("name", ""));
+            binding.role.setText(preferences.getString("role", ""));
         }
         binding.notswitch.setChecked(preferences.getBoolean("notificationOn", false));
         binding.notswitch.setOnClickListener(buttonView -> setNotifications(binding.notswitch.isChecked()));
@@ -147,21 +147,11 @@ public class ProfileFragment extends Fragment {
         viewModel.getMUser().observe(getViewLifecycleOwner(), user -> {
             binding.name.setText(user.getName());
             binding.role.setText(user.getRole());
+
+
+            editor.putString("name", binding.name.getText().toString()).commit();
+            editor.putString("role", binding.role.getText().toString()).commit();
         });
         viewModel.getUser();
-    }
-
-    @Override
-    public void onDestroy() {
-        editor.putString("name", binding.name.getText().toString()).commit();
-        editor.putString("role", binding.role.getText().toString()).commit();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        editor.putString("name", binding.name.getText().toString()).commit();
-        editor.putString("role", binding.role.getText().toString()).commit();
-        super.onStop();
     }
 }

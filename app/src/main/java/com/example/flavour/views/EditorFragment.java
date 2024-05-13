@@ -82,7 +82,7 @@ public class EditorFragment extends Fragment implements ItemAdapter.ItemEvents {
     public void setRecycler() {
         adapter = new ItemAdapter(new Recipe());
         list = new ArrayList<>();
-        list.add(new Step());
+        list.add(new Step(1));
         adapter.setEvents(this);
         adapter.submitList(list);
         binding.list.setAdapter(adapter);
@@ -109,7 +109,16 @@ public class EditorFragment extends Fragment implements ItemAdapter.ItemEvents {
     @Override
     public void SaveData(Recipe recipe, ArrayList<Step> steps) {
         recipe.setSteps(steps);
+/*        viewModel.getSuccess().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                Toast.makeText(getContext(), "Рецепт сохранен", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getContext(), "Рецепт не сохранен", Toast.LENGTH_SHORT).show();
+            }
+        });*/
         viewModel.addRecipe(recipe);
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -120,7 +129,7 @@ public class EditorFragment extends Fragment implements ItemAdapter.ItemEvents {
 
     @Override
     public void addStep() {
-        list.add(new Step());
+        list.add(new Step(list.size()+1));
         adapter.notifyItemInserted(list.size());
     }
 

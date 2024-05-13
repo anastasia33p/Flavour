@@ -51,7 +51,7 @@ public class RecipeAdapter extends ListAdapter<Recipe, RecipeAdapter.RecipeHolde
     public void onBindViewHolder(@NonNull RecipeHolder holder, int position) {
         Recipe recipe = getItem(position);
         holder.binding.nameRecipe.setText(recipe.getName());
-        holder.binding.descriptionRecipe.setText("Сложность: " + recipe.getDifficulty() + " из 5 \nВремя приготовления: " + recipe.getDuration() / 60000 + " минут");
+        holder.binding.descriptionRecipe.setText("Сложность: " + recipe.getDifficulty() + " из 5 \nВремя приготовления: " + recipe.getDuration() + " минут");
         holder.binding.favoriteButton.setChecked(recipe.isFavorite());
         Glide
                 .with(holder.itemView)

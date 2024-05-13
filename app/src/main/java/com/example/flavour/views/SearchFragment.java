@@ -3,6 +3,7 @@ package com.example.flavour.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.example.flavour.models.Recipe;
 import com.example.flavour.viewmodels.SearchViewModel;
 import com.example.flavour.workers.NotificationWorker;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEvents {
@@ -42,8 +44,13 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
         createWorker();
         viewModel.getRecipes();
         viewModel.getMUser().observe(getViewLifecycleOwner(), user -> {
-            if (user.getRole()=="Любитель") {
+            if (Objects.equals(user.getRole(), "Любитель")) {
+                Log.d("USER", user.getRole()+" "+user.getName());
                 binding.add.setVisibility(View.GONE);
+            }
+            if (Objects.equals(user.getRole(), "Проффесионал")) {
+                Log.d("USER", user.getRole()+" "+user.getName());
+                binding.add.setVisibility(View.VISIBLE);
             }
         });
         viewModel.getUser();
@@ -63,15 +70,6 @@ public class SearchFragment extends Fragment implements RecipeAdapter.RecipeEven
 
     @Override
     public void toFavorite(Recipe recipe, boolean is_favorite) {
-        viewModel.getAddFavorite().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                if (is_favorite) {
-                    Toast.makeText(getContext(), "Рецепт удален из избранного", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Рецепт добавлен в избранное", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         viewModel.addFavorite(recipe, is_favorite);
     }
 

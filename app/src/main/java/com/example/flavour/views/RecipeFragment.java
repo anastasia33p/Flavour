@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.flavour.adapters.StepAdapter;
 import com.example.flavour.databinding.FragmentRecipeBinding;
 import com.example.flavour.models.Recipe;
+import com.example.flavour.viewmodels.RecipeViewModel;
 import com.example.flavour.viewmodels.SearchViewModel;
 
 public class RecipeFragment extends Fragment implements StepAdapter.StepEvents {
@@ -63,16 +64,7 @@ public class RecipeFragment extends Fragment implements StepAdapter.StepEvents {
 
     @Override
     public void toFavorite(Recipe recipe, boolean is_favorite) {
-        SearchViewModel userViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        userViewModel.getAddFavorite().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                if (is_favorite) {
-                    Toast.makeText(getContext(), "Рецепт удален из избранного", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Рецепт добавлен в избранное", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        RecipeViewModel userViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         userViewModel.addFavorite(recipe, is_favorite);
     }
 }

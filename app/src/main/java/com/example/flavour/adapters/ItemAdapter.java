@@ -2,10 +2,12 @@ package com.example.flavour.adapters;
 
 import android.Manifest;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
     private final Recipe recipe;
@@ -88,6 +91,11 @@ public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
     public void onBindViewHolder(@NonNull ItemAdapter.ItemHolder holder, int position) {
         if (position == 0) {
             setListeners(holder);
+            holder.first.nameInp.setText(recipe.getName());
+            if(recipe.getDifficulty()!=0){
+                holder.first.diffInp.setText(String.valueOf(recipe.getDifficulty()));
+            }
+            holder.first.ingridientsInp.setText(recipe.getIngredients().stream().collect(Collectors.joining(";")));
             if (recipe.getDuration() != 0) {
                 holder.first.editTextTime.setText(String.valueOf(recipe.getDuration()));
             }
@@ -123,7 +131,7 @@ public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
             }
         } else if (position == getItemCount() - 1) {
             holder.last.save.setOnClickListener(v -> {
-                if (events != null) {
+                if (events != null && checkInputs(holder.last.save.getContext())) {
                     events.SaveData(recipe, new ArrayList<>(getCurrentList()));
                 }
             });
@@ -133,7 +141,7 @@ public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
             });
         } else {
             Step step = getCurrentList().get(position - 1);
-            holder.step.stepNum.setText("Шаг" + String.valueOf(position));
+            holder.step.stepNum.setText("Шаг " + String.valueOf(position));
             holder.step.nameInp.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -208,7 +216,10 @@ public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
 
             @Override
             public void afterTextChanged(Editable s) {
-                recipe.setDifficulty((Integer.parseInt(s.toString())));
+                if (!s.toString().isEmpty()) {
+                    recipe.setDifficulty((Integer.parseInt(s.toString())));
+                }
+
             }
         });
         holder.first.ingridientsInp.addTextChangedListener(new TextWatcher() {
@@ -287,5 +298,51 @@ public class ItemAdapter extends ListAdapter<Step, ItemAdapter.ItemHolder> {
         public boolean areContentsTheSame(@NonNull Step oldItem, @NonNull Step newItem) {
             return oldItem.getStep() == (newItem.getStep());
         }
+    }
+
+    private boolean checkInputs(Context context) {
+        if (recipe.getImage() == null) {
+            Toast.makeText(context,"Добавьте изображение рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getName().isEmpty()) {
+            Toast.makeText(context,"Введите название рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getName().length()>15) {
+            Toast.makeText(context,"Слишком длинное название рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getDifficulty() == 0) {
+            Toast.makeText(context,"Выберите сложность рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getDuration() == 0) {
+            Toast.makeText(context,"Выберите время приготовления рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getIngredients().size() == 1 && recipe.getIngredients().get(0)=="") {
+            Toast.makeText(context,"Добавьте ингредиенты рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (recipe.getDifficulty()<0 || recipe.getDifficulty()>5) {
+            Toast.makeText(context,"Некорректное значение сложности рецепта",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        for (Step step : getCurrentList()) {
+            if (step==null) {
+                Toast.makeText(context,"Добавьте шаги рецепта",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (step.getImage() == null || step.getImage().isEmpty()) {
+                Toast.makeText(context,"Добавьте изображения к шагу рецепта",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (step.getDescription().isEmpty()) {
+                Toast.makeText(context,"Добавьте описание шага рецепта",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
     }
 }

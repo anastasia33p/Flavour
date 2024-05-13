@@ -17,7 +17,7 @@
         android:id="@+id/stepNum"
         tools:text="Шаг 5"
         android:textSize="20sp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
         android:layout_gravity="start"
         android:layout_width="wrap_content"

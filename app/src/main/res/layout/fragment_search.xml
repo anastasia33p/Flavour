@@ -39,7 +39,8 @@
             android:drawableTint="?colorOnPrimary"
             android:backgroundTint="?colorSecondary"
             android:id="@+id/add"
-            app:cornerRadius="10dp"/>
+            app:cornerRadius="10dp"
+            android:layout_marginBottom="8dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

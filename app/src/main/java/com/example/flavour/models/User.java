@@ -54,7 +54,7 @@ public class User {
     }
 
     public ArrayList<Long> getFavorites() {
-        if (favorites.size() == 0) return new ArrayList<>();
+        if (favorites==null) return new ArrayList<>();
         return favorites;
     }
 

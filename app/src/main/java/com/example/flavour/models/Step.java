@@ -7,6 +7,9 @@ public class Step {
     private String description;
     private String image;
     public Step() {}
+    public Step(int step) {
+        this.step = step;
+    }
     public Step(int step, String description, String image) {
         this.step = step;
         this.description = description;

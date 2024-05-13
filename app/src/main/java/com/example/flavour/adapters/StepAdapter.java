@@ -72,18 +72,20 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepHolder> {
     @Override
     public void onBindViewHolder(@NonNull StepHolder holder, int position) {
         if (getItemViewType(position) == 0) {
+            holder.recipe.add.setText(recipe.isFavorite() ? "Удалить из избранных" : "Добавить в избранные");
             setRatingImages(recipe.getDifficulty(), holder.recipe.container);
             Glide
                     .with(holder.itemView)
                     .load(recipe.getImage())
                     .into(holder.recipe.imageRecipe);
-            String dur = recipe.getDuration() / 60000 + " минут";
+            String dur = recipe.getDuration() + " минут";
             holder.recipe.duration.setText(dur);
             holder.recipe.ingr.setText(setIngredients(recipe));
             holder.recipe.add.setOnClickListener(v -> {
                 if (events == null) return;
                 events.toFavorite(recipe, recipe.isFavorite());
                 recipe.setFavorite(!recipe.isFavorite());
+                holder.recipe.add.setText(recipe.isFavorite() ? "Удалить из избранных" : "Добавить в избранные");
             });
             return;
         }

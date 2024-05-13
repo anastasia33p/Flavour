@@ -44,15 +44,6 @@ public class FavoriteFragment extends Fragment implements RecipeAdapter.RecipeEv
 
     @Override
     public void toFavorite(Recipe recipe, boolean is_favorite) {
-        viewModel.getAddFavorite().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                if (is_favorite) {
-                    Toast.makeText(getContext(), "Рецепт удален из избранного", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Рецепт добавлен в избранное", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         viewModel.addFavorite(recipe, is_favorite);
     }
 }
