@@ -28,6 +28,7 @@ public class RecipeViewModel extends ViewModel {
                     .addOnFailureListener(e -> addFavorite.postValue(true));
         }
     }
+
     public MutableLiveData<Boolean> getAddFavorite() {
         return addFavorite;
     }

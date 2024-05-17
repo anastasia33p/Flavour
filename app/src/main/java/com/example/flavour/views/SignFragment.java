@@ -52,7 +52,7 @@ public class SignFragment extends Fragment {
                     .addOnSuccessListener(authResult -> {
                         ((MainActivity) requireActivity()).toSecondActivity();
                     })
-                    .addOnFailureListener(e -> Snackbar.make(binding.getRoot(), "Auth failed: ", Snackbar.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Snackbar.make(binding.getRoot(), "Ошибка в логине или пароле", Snackbar.LENGTH_SHORT).show());
         });
     }
 }

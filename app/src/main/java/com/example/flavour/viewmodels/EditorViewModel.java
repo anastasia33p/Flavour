@@ -21,15 +21,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditorViewModel extends ViewModel {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference recipes;
     FirebaseStorage storage;
     StorageReference storageRef;
+    Recipe recipe;
     MutableLiveData<Boolean> success = new MutableLiveData<>(false);
     private Uri imageUri;
 
-    public void addRecipe(Recipe recipe){
+    public void addRecipe(Recipe new_recipe){
+        this.recipe = new_recipe;
         firebaseDatabase = FirebaseDatabase.getInstance();
         recipes = firebaseDatabase.getReference("recipes");
         String recipe_image=uploadImage(Uri.parse(recipe.getImage()));
@@ -38,19 +43,32 @@ public class EditorViewModel extends ViewModel {
             @Override
             public void onSuccess(Uri uri) {
                 recipe.setImage(uri.toString());
+                loadImage(0,recipe.getSteps());
             }
         });
-        String step_image;
-        for (Step step : recipe.getSteps()) {
-            step_image = uploadImage(Uri.parse(step.getImage()));
-            imagesRef = storageRef.child(step_image);
-            imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    step.setImage(uri.toString());
+
+
+    }
+    private void loadImage(int iterator, List<Step> steps) {
+        Step step = steps.get(iterator);
+        StorageReference imagesRef;
+        String step_image=uploadImage(Uri.parse(step.getImage()));
+        imagesRef = storageRef.child(step_image);
+        imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                step.setImage(uri.toString());
+                if (iterator < steps.size() - 1) {
+                    loadImage(iterator + 1, steps);
                 }
-            });
-        }
+                else {
+                    pushRecipe(steps);
+                }
+            }
+        });
+    }
+    public void pushRecipe(List<Step> steps) {
+        //recipe.setSteps((ArrayList<Step>) steps);
         recipes.push().setValue(recipe).
                 addOnSuccessListener(aVoid -> {
                     success.setValue(true);

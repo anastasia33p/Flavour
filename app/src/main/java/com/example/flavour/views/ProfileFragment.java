@@ -45,8 +45,10 @@ public class ProfileFragment extends Fragment {
             isGranted -> {
                 if (isGranted) {
                     editor.putBoolean("notificationsAllowed", true).commit();
+                    binding.notswitch.setChecked(true);
                 } else {
                     editor.putBoolean("notificationsAllowed", false).commit();
+                    binding.notswitch.setChecked(false);
                 }
             });
 
@@ -88,6 +90,8 @@ public class ProfileFragment extends Fragment {
             binding.role.setText(preferences.getString("role", ""));
         }
         binding.notswitch.setChecked(preferences.getBoolean("notificationOn", false));
+
+        //Toast.makeText(requireContext(), "Уведомления " + (preferences.getBoolean("notificationOn", false) ? "включены" : "выключены"), Toast.LENGTH_SHORT).show();
         binding.notswitch.setOnClickListener(buttonView -> setNotifications(binding.notswitch.isChecked()));
         super.onViewCreated(view, savedInstanceState);
     }
@@ -95,11 +99,11 @@ public class ProfileFragment extends Fragment {
     private void setNotifications(boolean isChecked) {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS);
-            binding.notswitch.setChecked(false);
+
         } else {
+
             editor.putBoolean("notificationsAllowed", true).commit();
             editor.putBoolean("notificationOn", isChecked).commit();
-            Toast.makeText(requireContext(), String.valueOf(preferences.getBoolean("notificationsAllowed", false)), Toast.LENGTH_SHORT).show();
         }
     }
 

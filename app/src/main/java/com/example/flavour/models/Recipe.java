@@ -19,9 +19,10 @@ public class Recipe implements Parcelable {
     private boolean favorite = false;
 
 
+    public Recipe() {
+    }
 
-    public Recipe() {}
-    public Recipe(String name, String image, ArrayList<String> ingredients, long id,ArrayList<Step> steps, long duration, int difficulty) {
+    public Recipe(String name, String image, ArrayList<String> ingredients, long id, ArrayList<Step> steps, long duration, int difficulty) {
         this.name = name;
         this.image = image;
         this.ingredients = ingredients;

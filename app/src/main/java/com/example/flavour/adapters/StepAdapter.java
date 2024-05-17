@@ -67,7 +67,8 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepHolder> {
         );
     }
     public interface StepEvents {
-        void toFavorite(Recipe recipe, boolean is_favorite);
+        void toFavorite(boolean is_favorite);
+        void saveFile();
     }
     @Override
     public void onBindViewHolder(@NonNull StepHolder holder, int position) {
@@ -83,9 +84,13 @@ public class StepAdapter extends ListAdapter<Step, StepAdapter.StepHolder> {
             holder.recipe.ingr.setText(setIngredients(recipe));
             holder.recipe.add.setOnClickListener(v -> {
                 if (events == null) return;
-                events.toFavorite(recipe, recipe.isFavorite());
+                events.toFavorite(recipe.isFavorite());
                 recipe.setFavorite(!recipe.isFavorite());
                 holder.recipe.add.setText(recipe.isFavorite() ? "Удалить из избранных" : "Добавить в избранные");
+            });
+            holder.recipe.loadFile.setOnClickListener(v -> {
+                if (events == null) return;
+                events.saveFile();
             });
             return;
         }

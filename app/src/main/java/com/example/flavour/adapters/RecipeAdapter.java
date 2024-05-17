@@ -15,10 +15,13 @@ import com.example.flavour.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class RecipeAdapter extends ListAdapter<Recipe, RecipeAdapter.RecipeHolder> {
     private RecipeEvents events;
+    public List<Recipe> recipes;
 
     public RecipeAdapter() {
         super(new RecipeDiffCallback());
@@ -104,6 +107,23 @@ public class RecipeAdapter extends ListAdapter<Recipe, RecipeAdapter.RecipeHolde
         public boolean areContentsTheSame(@NonNull Recipe oldItem, @NonNull Recipe newItem) {
             return oldItem.getId().equals(newItem.getId());
         }
+    }
+    public void search(CharSequence query) {
+        if (query==""){
+            submitList(recipes);
+        }
+        if (recipes == null) return;
+        List<Recipe> filteredList = recipes.stream()
+                .filter(recipe -> recipe.getName().toLowerCase().contains(query.toString().toLowerCase()))
+                .collect(Collectors.toList());
+        submitList(filteredList);
+    }
+
+    public void submitList(List<Recipe> recipes) {
+        if (this.recipes == null){
+            this.recipes = recipes;
+        }
+        super.submitList(recipes);
     }
 
 }

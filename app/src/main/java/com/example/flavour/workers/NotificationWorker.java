@@ -41,16 +41,21 @@ public class NotificationWorker extends Worker {
 
     public void checkRecipes() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("last_id", Context.MODE_PRIVATE);
-        Long last_id = sharedPreferences.getLong("last_id", 0);
+        String last_id = sharedPreferences.getString("last_id", "");
         recipes.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DataSnapshot data = task.getResult();
-                String id = data.child(String.valueOf(data.getChildrenCount() - 1)).getKey();
+                //get last child of data
+                String id = null;
+                for (DataSnapshot snapshot : data.getChildren()) {
+                    id = snapshot.getKey();
+                }
                 if (id == null) return;
-                if (!id.equals(String.valueOf(last_id))) {
+                if (!id.equals(last_id)) {
                     createNotification("Уведомление", "Добавлен новый рецепт");
                     SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE).edit();
-                    editor.putLong("last_id", Long.parseLong(id)).apply();
+                    editor.putString("last_id", id).apply();
+                    Log.d("Notifications", id);
                 }
             }
         });
