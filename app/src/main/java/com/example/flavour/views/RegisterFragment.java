@@ -22,6 +22,7 @@ public class RegisterFragment extends Fragment {
     FirebaseAuth auth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,10 +31,6 @@ public class RegisterFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         users = firebaseDatabase.getReference("users");
         binding.sign.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(binding.emailInp.getText().toString())) {
-                Snackbar.make(binding.getRoot(), "Введите почту", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
             if (TextUtils.isEmpty(binding.nameInp.getText().toString())) {
                 Snackbar.make(binding.getRoot(), "Введите имя", Snackbar.LENGTH_SHORT).show();
                 return;

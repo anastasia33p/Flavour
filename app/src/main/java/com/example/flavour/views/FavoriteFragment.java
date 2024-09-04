@@ -1,5 +1,6 @@
 package com.example.flavour.views;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +21,13 @@ import com.example.flavour.viewmodels.FavoritesViewModel;
 public class FavoriteFragment extends Fragment implements RecipeAdapter.RecipeEvents {
     private FragmentFavoriteBinding binding;
     private FavoritesViewModel viewModel;
+    RecipeAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false);
-        RecipeAdapter adapter = new RecipeAdapter();
+        adapter = new RecipeAdapter();
         adapter.setEvents(this);
 
         viewModel = new ViewModelProvider(this).get(FavoritesViewModel.class);

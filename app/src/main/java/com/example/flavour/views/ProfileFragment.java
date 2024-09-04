@@ -134,7 +134,7 @@ public class ProfileFragment extends Fragment {
         popupMenu.setOnMenuItemClickListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.author) {
-                showAuthor(inflater);
+                showProgram(inflater);
                 return true;
             } else if (itemId == R.id.program) {
                 showProgram(inflater);
